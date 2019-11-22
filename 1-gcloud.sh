@@ -6,29 +6,44 @@ gcloud init
 
 gcloud projects create ${CLOUDSDK_CORE_PROJECT} --name=${CLOUDSDK_CORE_PROJECT}
 
-gcloud services enable compute.googleapis.com
+gcloud services enable cloudresourcemanager.googleapis.com
 gcloud services enable iam.googleapis.com
-gcloud services enable iamcredentials.googleapis.com
+gcloud services enable compute.googleapis.com
 
-### Networking
-gcloud compute networks create k8s-network --subnet-mode custom\
+### Create Terraform admin account
+gcloud iam service-accounts create terraform \
+  --display-name "Terraform admin account"
 
-gcloud compute networks subnets create k8s-subnet \
-  --network k8s-network \
-  --range 10.240.0.0/24
+gcloud iam service-accounts keys create ${TF_VAR_creds} \
+  --iam-account terraform@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com
 
-gcloud compute firewall-rules create k8s-allow-internal \
-  --allow tcp,udp,icmp \
-  --network k8s-network \
-  --source-ranges 10.240.0.0/24,10.200.0.0/16
+gcloud projects add-iam-policy-binding ${CLOUDSDK_CORE_PROJECT} \
+  --member serviceAccount:terraform@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com \
+  --role roles/editor
 
-gcloud compute firewall-rules create k8s-allow-external \
-  --allow tcp:22,tcp:6443,icmp \
-  --network k8s-network \
-  --source-ranges 0.0.0.0/0
+gcloud projects add-iam-policy-binding ${CLOUDSDK_CORE_PROJECT} \
+  --member serviceAccount:terraform@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com \
+  --role roles/storage.admin
 
-gcloud compute addresses create k8s-ip \
-  --region $CLOUDSDK_COMPUTE_REGION
+### Networking (created in Terraform)
+# gcloud compute networks create k8s-network --subnet-mode custom\
+
+# gcloud compute networks subnets create k8s-subnet \
+#   --network k8s-network \
+#   --range 10.240.0.0/24
+
+# gcloud compute firewall-rules create k8s-allow-internal \
+#   --allow tcp,udp,icmp \
+#   --network k8s-network \
+#   --source-ranges 10.240.0.0/24,10.200.0.0/16
+
+# gcloud compute firewall-rules create k8s-allow-external \
+#   --allow tcp:22,tcp:6443,icmp \
+#   --network k8s-network \
+#   --source-ranges 0.0.0.0/0
+
+# gcloud compute addresses create k8s-ip \
+#   --region $CLOUDSDK_COMPUTE_REGION
 
 #### Instances
 

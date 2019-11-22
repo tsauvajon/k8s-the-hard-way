@@ -1,2 +1,7 @@
 .env
-certificates
+certificates/
+
+*.plan
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
