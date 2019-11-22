@@ -1,9 +1,4 @@
-#  Local .terraform directories
-**/.terraform/*
-
-# .tfstate files
-*.tfstate
-*.tfstate.*
-
-# .tfvars files
-*.tfvars
+.env
+ca-key.pem
+ca.csr
+ca.pem
