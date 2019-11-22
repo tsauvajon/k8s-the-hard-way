@@ -1,4 +1,2 @@
 .env
-ca-key.pem
-ca.csr
-ca.pem
+certificates
