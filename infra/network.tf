@@ -43,7 +43,7 @@ resource "google_compute_firewall" "external" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-resource "google_compute_address" "static-ip" {
+resource "google_compute_address" "static_ip" {
   name   = "k8s-ip"
   region = var.region
 }

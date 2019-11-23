@@ -1,3 +1,4 @@
+# https://www.terraform-best-practices.com/code-structure
 provider "google" {
   region      = var.region
   credentials = file(var.creds)

@@ -10,9 +10,9 @@ gcloud services enable cloudresourcemanager.googleapis.com
 gcloud services enable iam.googleapis.com
 gcloud services enable compute.googleapis.com
 
-### Create Terraform admin account
+### Create a Terraform editor account
 gcloud iam service-accounts create terraform \
-  --display-name "Terraform admin account"
+  --display-name "Terraform editor account"
 
 gcloud iam service-accounts keys create ${TF_VAR_creds} \
   --iam-account terraform@${CLOUDSDK_CORE_PROJECT}.iam.gserviceaccount.com
@@ -45,35 +45,35 @@ gcloud projects add-iam-policy-binding ${CLOUDSDK_CORE_PROJECT} \
 # gcloud compute addresses create k8s-ip \
 #   --region $CLOUDSDK_COMPUTE_REGION
 
-#### Instances
+#### Instances (Created in terraform)
 
-## Controllers
-for i in 0 1 2; do
-  gcloud compute instances create controller-${i} \
-    --async \
-    --boot-disk-size 200GB \
-    --can-ip-forward \
-    --image-family ubuntu-1804-lts \
-    --image-project ubuntu-os-cloud \
-    --machine-type n1-standard-1 \
-    --private-network-ip 10.240.0.1${i} \
-    --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring \
-    --subnet k8s-subnet \
-    --tags k8s,controller
-done
+# ## Controllers
+# for i in 0 1 2; do
+#   gcloud compute instances create controller-${i} \
+#     --async \
+#     --boot-disk-size 200GB \
+#     --can-ip-forward \
+#     --image-family ubuntu-1804-lts \
+#     --image-project ubuntu-os-cloud \
+#     --machine-type n1-standard-1 \
+#     --private-network-ip 10.240.0.1${i} \
+#     --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring \
+#     --subnet k8s-subnet \
+#     --tags k8s,controller
+# done
 
-## Workers
-for i in 0 1 2; do
-  gcloud compute instances create worker-${i} \
-    --async \
-    --boot-disk-size 200GB \
-    --can-ip-forward \
-    --image-family ubuntu-1804-lts \
-    --image-project ubuntu-os-cloud \
-    --machine-type n1-standard-1 \
-    --metadata pod-cidr=10.200.${i}.0/24 \
-    --private-network-ip 10.240.0.2${i} \
-    --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring \
-    --subnet k8s-subnet \
-    --tags k8s,worker
-done
+# ## Workers
+# for i in 0 1 2; do
+#   gcloud compute instances create worker-${i} \
+#     --async \
+#     --boot-disk-size 200GB \
+#     --can-ip-forward \
+#     --image-family ubuntu-1804-lts \
+#     --image-project ubuntu-os-cloud \
+#     --machine-type n1-standard-1 \
+#     --metadata pod-cidr=10.200.${i}.0/24 \
+#     --private-network-ip 10.240.0.2${i} \
+#     --scopes compute-rw,storage-ro,service-management,service-control,logging-write,monitoring \
+#     --subnet k8s-subnet \
+#     --tags k8s,worker
+# done
