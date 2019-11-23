@@ -5,3 +5,10 @@ provider "google" {
 
   version = "~> 3.0.0-beta.1"
 }
+
+terraform {
+  backend "gcs" {
+    # bucket      = "${var.project}-tf-state"
+    # credentials = file(var.creds)
+  }
+}

@@ -1,3 +1,5 @@
+# Generate the certificates for all the services
+
 mkdir -p certificates
 cd certificates
 
@@ -99,8 +101,8 @@ cat > ${instance}-csr.json <<EOF
 }
 EOF
 
-INTERNAL_IP=$(terraform output -state=../terraform.tfstate ${instance}_internal_ip)
-EXTERNAL_IP=$(terraform output -state=../terraform.tfstate ${instance}_external_ip)
+INTERNAL_IP=$(cd ../infra; terraform output ${instance}_internal_ip)
+EXTERNAL_IP=$(cd ../infra; terraform output ${instance}_external_ip)
 
 cfssl gencert \
   -ca=ca.pem \
@@ -209,7 +211,7 @@ cfssl gencert \
 
 ################### Kubernetes API ###################
 {
-KUBERNETES_PUBLIC_ADDRESS=$(terraform output -state=../terraform.tfstate k8s_public_ip)
+KUBERNETES_PUBLIC_ADDRESS=$(cd ../infra; terraform output k8s_public_ip)
 KUBERNETES_HOSTNAMES=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local
 
 cat > kubernetes-csr.json <<EOF
@@ -273,12 +275,12 @@ cfssl gencert \
 
 ################### Install certificates ###################
 for instance in worker_0 worker_1 worker_2; do
-  name=$(terraform output -state=../terraform.tfstate ${instance}_name)
+  name=$(cd ../infra; terraform output ${instance}_name)
   gcloud compute scp ca.pem ${instance}-key.pem ${instance}.pem ${name}:~/
 done
 
 for instance in controller_0 controller_1 controller_2; do
-  name=$(terraform output -state=../terraform.tfstate ${instance}_name)
+  name=$(cd ../infra; terraform output ${instance}_name)
   gcloud compute scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
     service-account-key.pem service-account.pem ${name}:~/
 done
