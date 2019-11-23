@@ -29,8 +29,8 @@ resource "google_compute_instance" "controller_0" {
       size = 40 # Gb
       type = "pd-standard"
 
-      # format: projects/{project}/global/images/{image}
-      image = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-lts"
+      # format: {project}/{image}
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 }
@@ -65,7 +65,7 @@ resource "google_compute_instance" "controller_1" {
       size = 40
       type = "pd-standard"
 
-      image = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-lts"
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 }
@@ -100,7 +100,7 @@ resource "google_compute_instance" "controller_2" {
       size = 40
       type = "pd-standard"
 
-      image = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-lts"
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 }

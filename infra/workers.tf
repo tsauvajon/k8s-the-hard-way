@@ -11,6 +11,8 @@ resource "google_compute_instance" "worker_0" {
   network_interface {
     network_ip = "10.240.0.20"
     subnetwork = google_compute_subnetwork.k8s.self_link
+
+    access_config {}
   }
 
   service_account {
@@ -29,8 +31,8 @@ resource "google_compute_instance" "worker_0" {
       size = 40 # Gb
       type = "pd-standard"
 
-      # format: projects/{project}/global/images/{image}
-      image = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-lts"
+      # format: {project}/{image}
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 
@@ -51,6 +53,8 @@ resource "google_compute_instance" "worker_1" {
   network_interface {
     network_ip = "10.240.0.21"
     subnetwork = google_compute_subnetwork.k8s.self_link
+
+    access_config {}
   }
 
   service_account {
@@ -69,7 +73,7 @@ resource "google_compute_instance" "worker_1" {
       size = 40
       type = "pd-standard"
 
-      image = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-lts"
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 
@@ -90,6 +94,8 @@ resource "google_compute_instance" "worker_2" {
   network_interface {
     network_ip = "10.240.0.22"
     subnetwork = google_compute_subnetwork.k8s.self_link
+
+    access_config {}
   }
 
   service_account {
@@ -108,7 +114,7 @@ resource "google_compute_instance" "worker_2" {
       size = 40
       type = "pd-standard"
 
-      image = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-lts"
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
     }
   }
 
